@@ -1,0 +1,27 @@
+package ssh_test
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/frankywahl/allowedSignatures/internal/ssh"
+)
+
+func TestFilterSigningKeys(t *testing.T) {
+	given := []string{
+		"ssh-dss AAAAB3NzaC1kc3MAAACBAPgwAsaynaDuJCTgGrOaSkSgrG00fzcvhHvyxh2F74Q/wniDwXFrwDlDleisldP0+g4T8fKzndWmnpGIX42eWgNNOEo2sAuQ4VwTepSaJ2ljJe17tkJZYAvpl6e3/MgW2dZ/0cv3ZjfP1GhxlInz1kEjqmziWR9GyUI46d/+LC6nAAAAFQCtF4h9CQdvpkulHXtwYY8scBtcmwAAAIEA7iayA29WfaBPcDjO74W4biVpoPcbrW38Eub33kWXgPQlHT2aE+gTAklXpeX9ZJpHwJ8DGRHJ41AQ+8oax2f7O6jQMTJgXGFDVjLvbZP/v0PSitXmJeCyRkEj7sF87pR/fnSaeGdW6ZUlHo6M3kXOqwPf+F4+f9ejvvnU3LOGgFEAAACBAK1UGmea1HNlJkX3p9mMQgZtSgh5TwWb78/ephaXsidPWDdW8ULraHrW2wz8ghtKjoSjmAQSKXKCnoBvCvYOhs1LDnhLkeNRsbi8ECtHX8Rrn/JeIOhg/e0kvEz2d3Rjtd1l+f3if4hRvCgb0KadJPMqDbUQ1VybEtGPwxeU0OBK anything@example.com",
+		"ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGDSC2TXkQO0vi5v5152Ms0VCC4K0AaviZHWgLu0jWrU5708cpCEtqCpxLf7VdEVfaZY64Jg8eJoXe1WXXsc6w4= anything@example.com",
+		"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfyAbu3tP1AK9eExu6YZwq3rEdg9OV9TOInh2dZVPXe anything@example.com",
+		"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtF5eaAGdYEeQHiMnfwehJloyLNgLRF8tiM2OUJEF8foHT5ymcqH1T3rN4GiRnEUdsQcORYbMs/A7rGzgvjFVl/Yb5ZVMXpNrQhjRB6lOmn9cn0i8VKezqGPkQpMhPcIGSQUX+1HAUFO/4ETcERX2NihIuRQLe07P7tHT17uAPihq3llEmmkuUR8UATsUgZNgnqHahpVsO/uaWG4Y+YVj9IZIkvICTLu4F3YXqXJBYuycPXeN2QwFHPDEW5jxANkYa1DZEAuaszj/s/DOWWT/Gg6WBKlWsjD8LoOfo5gQJct/4+t5YBiSlJKZXpqFnYziIa6hw8yT6yZ/FPxTv8yiP85jrLYcEXWr590yc9XlYfqaWGyFZ+GqZJ+Fw0XEuiaw5DmLP7uvYn/B1HJTRQKZoCIZ8QZIwW19Lw1kXdDnD9h4mPw0jRtYTUQx4r7w89YdHaNEs/Dbn4t3V7gPPXs37+PafTFdNhR8hWjseSf5EsneTLBAWc6qHIlAZBi1hEBs= anything@example.com",
+	}
+	expect := []string{
+		"ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGDSC2TXkQO0vi5v5152Ms0VCC4K0AaviZHWgLu0jWrU5708cpCEtqCpxLf7VdEVfaZY64Jg8eJoXe1WXXsc6w4= anything@example.com",
+		"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPfyAbu3tP1AK9eExu6YZwq3rEdg9OV9TOInh2dZVPXe anything@example.com",
+		"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCtF5eaAGdYEeQHiMnfwehJloyLNgLRF8tiM2OUJEF8foHT5ymcqH1T3rN4GiRnEUdsQcORYbMs/A7rGzgvjFVl/Yb5ZVMXpNrQhjRB6lOmn9cn0i8VKezqGPkQpMhPcIGSQUX+1HAUFO/4ETcERX2NihIuRQLe07P7tHT17uAPihq3llEmmkuUR8UATsUgZNgnqHahpVsO/uaWG4Y+YVj9IZIkvICTLu4F3YXqXJBYuycPXeN2QwFHPDEW5jxANkYa1DZEAuaszj/s/DOWWT/Gg6WBKlWsjD8LoOfo5gQJct/4+t5YBiSlJKZXpqFnYziIa6hw8yT6yZ/FPxTv8yiP85jrLYcEXWr590yc9XlYfqaWGyFZ+GqZJ+Fw0XEuiaw5DmLP7uvYn/B1HJTRQKZoCIZ8QZIwW19Lw1kXdDnD9h4mPw0jRtYTUQx4r7w89YdHaNEs/Dbn4t3V7gPPXs37+PafTFdNhR8hWjseSf5EsneTLBAWc6qHIlAZBi1hEBs= anything@example.com",
+	}
+
+	result := ssh.FilterSigningKeys(given)
+	if !reflect.DeepEqual(expect, result) {
+		t.Fatalf("expected %v, got %v", expect, result)
+	}
+}
