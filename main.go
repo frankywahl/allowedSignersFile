@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/frankywahl/allowedSignatures/internal/ssh"
 )
 
 var ghToken string
@@ -47,7 +49,7 @@ func run(ctx context.Context) error {
 	}
 
 	for _, user := range users {
-		for _, key := range user.Keys {
+		for _, key := range ssh.FilterSigningKeys(user.Keys) {
 			fmt.Printf("%s %s %s\n", user.Login, key, user.Login)
 		}
 	}
