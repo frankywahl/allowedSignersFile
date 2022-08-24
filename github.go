@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/shurcooL/githubv4"
@@ -97,7 +97,7 @@ func (c *loggingClient) RoundTrip(r *http.Request) (*http.Response, error) {
 		Variables map[string]interface{}
 	}
 	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("could not read body: %w", err)
 	}
@@ -105,7 +105,7 @@ func (c *loggingClient) RoundTrip(r *http.Request) (*http.Response, error) {
 	if err := json.Unmarshal(body, &query); err != nil {
 		return nil, fmt.Errorf("could not unmarshal query: %w", err)
 	}
-	r.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	r.Body = io.NopCloser(bytes.NewBuffer(body))
 
 	vars, err := json.Marshal(query.Variables)
 	if err != nil {
