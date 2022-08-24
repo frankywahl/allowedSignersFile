@@ -27,7 +27,9 @@ func run(ctx context.Context) error {
 	if err := parseFlags(ctx); err != nil {
 		return err
 	}
-	opts := []Option{}
+	opts := []Option{
+		SetLogger(&defaultLogger{}),
+	}
 
 	if verbose {
 		opts = append(opts, SetVerbose())
