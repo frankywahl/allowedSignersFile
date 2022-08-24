@@ -5,6 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -50,9 +51,17 @@ func run(ctx context.Context) error {
 		return err
 	}
 
+	if err := printOutput(os.Stdout, users); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func printOutput(w io.Writer, users []User) error {
 	for _, user := range users {
 		for _, key := range ssh.FilterSigningKeys(user.Keys) {
-			fmt.Printf("%s %s %s\n", user.Login, key, user.Login)
+			fmt.Fprintf(os.Stdout, "%s %s %s\n", user.Login, key, user.Login)
 		}
 	}
 	return nil
