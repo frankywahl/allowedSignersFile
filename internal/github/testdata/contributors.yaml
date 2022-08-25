@@ -1,0 +1,79 @@
+---
+version: 2
+interactions:
+    - id: 0
+      request:
+        proto: HTTP/1.1
+        proto_major: 1
+        proto_minor: 1
+        content_length: 375
+        transfer_encoding: []
+        trailer: {}
+        host: api.github.com
+        remote_addr: ""
+        request_uri: ""
+        body: |
+            {"query":"query($name:String!$owner:String!$prCursor:String){repository(owner: $owner, name: $name){name,defaultBranchRef{target{... on Commit{history(first: 100, after: $prCursor){pageInfo{hasNextPage,endCursor},nodes{author{user{login,publicKeys(first: 100, after: null){nodes{key}}}}}}}}}}}","variables":{"name":"allowedSignersFile","owner":"frankywahl","prCursor":null}}
+        form: {}
+        headers:
+            Content-Type:
+                - application/json
+        url: https://api.github.com/graphql
+        method: POST
+      response:
+        proto: HTTP/2.0
+        proto_major: 2
+        proto_minor: 0
+        transfer_encoding: []
+        trailer: {}
+        content_length: -1
+        uncompressed: true
+        body: '{"data":{"repository":{"name":"allowedSignersFile","defaultBranchRef":{"target":{"history":{"pageInfo":{"hasNextPage":false,"endCursor":"d1456affd0d6a68d19f76c91d21619737aba3384 5"},"nodes":[{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}},{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}},{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}},{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}},{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}},{"author":{"user":{"login":"frankywahl","publicKeys":{"nodes":[{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"},{"key":"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"}]}}}}]}}}}}}'
+        headers:
+            Access-Control-Allow-Origin:
+                - '*'
+            Access-Control-Expose-Headers:
+                - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset
+            Content-Security-Policy:
+                - default-src 'none'
+            Content-Type:
+                - application/json; charset=utf-8
+            Date:
+                - Wed, 24 Aug 2022 16:12:31 GMT
+            Github-Authentication-Token-Expiration:
+                - 2023-05-12 22:00:00 UTC
+            Referrer-Policy:
+                - origin-when-cross-origin, strict-origin-when-cross-origin
+            Server:
+                - GitHub.com
+            Strict-Transport-Security:
+                - max-age=31536000; includeSubdomains; preload
+            Vary:
+                - Accept-Encoding, Accept, X-Requested-With
+            X-Accepted-Oauth-Scopes:
+                - repo
+            X-Content-Type-Options:
+                - nosniff
+            X-Frame-Options:
+                - deny
+            X-Github-Media-Type:
+                - github.v4; format=json
+            X-Github-Request-Id:
+                - DCD8:13EC9:1F1CF50:1FC429C:63064DEB
+            X-Oauth-Scopes:
+                - delete:packages, gist, read:org, repo, workflow, write:packages
+            X-Ratelimit-Limit:
+                - "5000"
+            X-Ratelimit-Remaining:
+                - "4985"
+            X-Ratelimit-Reset:
+                - "1661359013"
+            X-Ratelimit-Resource:
+                - graphql
+            X-Ratelimit-Used:
+                - "15"
+            X-Xss-Protection:
+                - "0"
+        status: 200 OK
+        code: 200
+        duration: 277.130083ms
