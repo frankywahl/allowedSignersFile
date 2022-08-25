@@ -1,0 +1,47 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+    - go mod tidy
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  -
+    id: allowed-signers
+    binary: allowed-signers
+    main: main.go
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - 386
+    env:
+      - CGO_ENABLED=0
+universal_binaries:
+  -
+    id: allowed-signers
+    replace: false
+archives:
+-
+  name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}-{{ .Version }}"
+  replacements:
+    darwin: MacOS
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: amd64
+    arm64: arm64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'

@@ -37,9 +37,9 @@ clean:
 
 gorelease:
 	docker run --rm --privileged \
-		-v $(shell pwd):/go/src/github.com/frankywahl/oathman \
+		-v $(shell pwd):/go/src/github.com/frankywahl/allowed-signers \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-w /go/src/github.com/frankywahl/oathman \
+		-w /go/src/github.com/frankywahl/allowed-signers \
 		-e GITHUB_TOKEN=${GITHUB_TOKEN} \
 		-e SOURCE=${SOURCE} \
 		goreleaser/goreleaser release \
