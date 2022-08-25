@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/frankywahl/allowedSignatures/internal/github"
 	"github.com/frankywahl/allowedSignatures/internal/ssh"
 )
 
@@ -28,20 +29,18 @@ func run(ctx context.Context) error {
 	if err := parseFlags(ctx); err != nil {
 		return err
 	}
-	opts := []Option{
-		SetLogger(&defaultLogger{}),
-	}
+	opts := []github.Option{}
 
 	if verbose {
-		opts = append(opts, SetVerbose())
+		opts = append(opts, github.SetVerbose())
 	}
-	ghClient, err := NewClient(ghToken, opts...)
+	ghClient, err := github.NewClient(ghToken, opts...)
 
 	if err != nil {
 		return err
 	}
 
-	var users []User
+	var users []github.User
 	if useContributors {
 		users, err = ghClient.GetContributorKeys(ctx, owner, repo)
 	} else {
@@ -58,7 +57,7 @@ func run(ctx context.Context) error {
 	return nil
 }
 
-func printOutput(w io.Writer, users []User) error {
+func printOutput(w io.Writer, users []github.User) error {
 	for _, user := range users {
 		for _, key := range ssh.FilterSigningKeys(user.Keys) {
 			fmt.Fprintf(os.Stdout, "%s %s %s\n", user.Login, key, user.Login)
