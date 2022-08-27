@@ -80,7 +80,7 @@ func parseFlags(ctx context.Context) error {
 		return fmt.Errorf("owner cannot be blank")
 	}
 	if repo == "" {
-		return fmt.Errorf("repo cannot be blank")
+		return fmt.Errorf("repository cannot be blank")
 	}
 	return nil
 }
