@@ -45,3 +45,13 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+
+brews:
+  - name: allowed-signers
+    folder: Formula
+    description: Download List of public users' SSH key for a repository
+    tap:
+      owner: frankywahl
+      name: homebrew-brew
+    download_strategy: CustomGitHubPrivateRepositoryReleaseDownloadStrategy
+    custom_require: "../download_strategy"
