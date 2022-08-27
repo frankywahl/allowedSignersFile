@@ -23,6 +23,15 @@ jobs:
           go mod download
           go mod tidy -v
 
+      - name: Login Github Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Set SOURCE Environment
+        run: |
+          echo 'SOURCE<<EOF' >> $GITHUB_ENV
+          echo ${GITHUB_SERVER_URL}/${{ github.repository }} >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
       - name: Run GoReleaser
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
