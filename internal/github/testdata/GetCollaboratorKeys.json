@@ -1,0 +1,30 @@
+{
+  "data": {
+    "repository": {
+      "collaborators": {
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "Y3Vyc29yOnYyOpHOAFB3Xw=="
+        },
+        "nodes": [
+          {
+            "login": "frankywahl",
+            "publicKeys": {
+              "nodes": [
+                {
+                  "key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBkZ1Tc8G6C5VtqY4UhkAB4GjfXk8CmjWDprHSC32N/Q"
+                },
+                {
+                  "key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHiZVRNPBDw5ilG0Psl+3kckQ97luUhdAeYs6DRmus0O"
+                },
+                {
+                  "key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJvCgD6pc1tnu2QAmsrXwMVQ9RfbvfvlxAFJ3qhAfroP"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
