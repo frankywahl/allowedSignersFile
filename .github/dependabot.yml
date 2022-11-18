@@ -4,11 +4,9 @@ updates:
   - package-ecosystem: gomod
     directory: '/'
     schedule:
-      interval: daily
-      time: '04:00'
+      interval: monthly
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
-      time: '04:00'
+      interval: monthly
