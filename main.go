@@ -1,6 +1,5 @@
 package main
 
-// Cool
 import (
 	"context"
 	"flag"

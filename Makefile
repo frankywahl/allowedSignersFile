@@ -74,3 +74,6 @@ vendor: ## Vendor dependencies locally
 vet: ## Run vet on go files
 	$(GO) vet ./... > ${VET_REPORT} 2>&1 ;
 
+.PHONY: vulncheck
+vulncheck: ## Run vulnerability scanner check
+	$(GO) run golang.org/x/vuln/cmd/govulncheck ./...
