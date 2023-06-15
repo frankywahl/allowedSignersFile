@@ -49,7 +49,7 @@ fmt: ## Run fmt on go files
 
 .PHONY: gorelease
 gorelease: ## Create a fake release. Use Github Actions for a real release
-		$(GORELEASER) release --rm-dist --snapshot
+		$(GORELEASER) release --clean --snapshot
 
 .PHONY: help
 help: ## Show this help

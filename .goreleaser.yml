@@ -27,14 +27,15 @@ universal_binaries:
     replace: false
 archives:
 -
-  name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}-{{ .Version }}"
-  replacements:
-    darwin: MacOS
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: amd64
-    arm64: arm64
+  name_template: >-
+    {{ .ProjectName }}_
+    {{- .Version }}_
+    {{- if eq .Os "darwin" }}macOS-
+    {{- else if eq .Os "linux" }}Linux-
+    {{- else if eq .Os "windows" }}Windows-
+    {{- else }}{{ title .Os }}{{ end }}
+    {{- if eq .Arch "amd64" }}64bit
+    {{- else }}{{ .Arch }}{{ end }}
 checksum:
   name_template: 'checksums.txt'
 snapshot:
