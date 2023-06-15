@@ -1,6 +1,6 @@
 module github.com/frankywahl/allowedSignatures
 
-go 1.19
+go 1.20
 
 require (
 	github.com/shurcooL/githubv4 v0.0.0-20220520033151-0b4e3294ff00
