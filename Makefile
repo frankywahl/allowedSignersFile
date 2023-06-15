@@ -29,6 +29,10 @@ default: help
 %-docker: ## Run a make command using docker
 	@DOCKER=true $(MAKE) $*
 
+.PHONY: build
+build: ## Build will create a binary for this system. Similar to `go build`, but uses goreleaser.
+	$(GORELEASER) build --snapshot --clean --single-target
+
 .PHONY: clean
 clean: ## Clean all dependencies
 	-rm -f ${TEST_REPORT}
