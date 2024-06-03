@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/shurcooL/githubv4 v0.0.0-20220520033151-0b4e3294ff00
-	golang.org/x/oauth2 v0.19.0
+	golang.org/x/oauth2 v0.20.0
 	golang.org/x/vuln v1.1.1
 )
 
