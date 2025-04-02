@@ -13,7 +13,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// Logger formater
+// Logger formater.
 type Logger interface {
 	Infof(format string, opts ...interface{})
 }
@@ -34,10 +34,10 @@ type localClient struct {
 	logger   Logger
 }
 
-// Option can be passed when instantiating a client
+// Option can be passed when instantiating a client.
 type Option func(s *localClient) error
 
-// NewEnterpriseClient give a github client for use with Enterprise
+// NewEnterpriseClient give a github client for use with Enterprise.
 func NewEnterpriseClient(url string, token string, opts ...Option) (*localClient, error) {
 	src := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
@@ -55,15 +55,16 @@ func NewEnterpriseClient(url string, token string, opts ...Option) (*localClient
 			return nil, fmt.Errorf("error creating client: %w", err)
 		}
 	}
+
 	return lc, nil
 }
 
-// NewClient will create a new Github Client with Github's URL
+// NewClient will create a new Github Client with Github's URL.
 func NewClient(token string, opts ...Option) (*localClient, error) {
 	return NewEnterpriseClient("https://api.github.com/graphql", token, opts...)
 }
 
-// SetVerbose will log the requests that are being made
+// SetVerbose will log the requests that are being made.
 func SetVerbose() Option {
 	return func(c *localClient) error {
 		src := oauth2.StaticTokenSource(
@@ -75,14 +76,16 @@ func SetVerbose() Option {
 			logger:   c.logger,
 		}
 		c.ghClient = githubv4.NewEnterpriseClient(c.url, oauthClient)
+
 		return nil
 	}
 }
 
-// SetLogger allows to create a logger for the requests
+// SetLogger allows to create a logger for the requests.
 func SetLogger(l Logger) Option {
 	return func(c *localClient) error {
 		c.logger = l
+
 		return nil
 	}
 }
@@ -97,7 +100,9 @@ func (c *loggingClient) RoundTrip(r *http.Request) (*http.Response, error) {
 		Query     string
 		Variables map[string]interface{}
 	}
+
 	defer r.Body.Close()
+
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("could not read body: %w", err)
@@ -106,6 +111,7 @@ func (c *loggingClient) RoundTrip(r *http.Request) (*http.Response, error) {
 	if err := json.Unmarshal(body, &query); err != nil {
 		return nil, fmt.Errorf("could not unmarshal query: %w", err)
 	}
+
 	r.Body = io.NopCloser(bytes.NewBuffer(body))
 
 	vars, err := json.Marshal(query.Variables)
@@ -130,6 +136,7 @@ type User struct {
 
 func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string) ([]User, error) {
 	users := []User{}
+
 	var query struct {
 		Repository struct {
 			Name             string
@@ -164,6 +171,7 @@ func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string
 		"owner":    githubv4.String(owner),
 		"name":     githubv4.String(name),
 	}
+
 	for {
 		if err := l.ghClient.Query(ctx, &query, variables); err != nil {
 			return users, err
@@ -171,15 +179,19 @@ func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string
 
 		for _, commit := range query.Repository.DefaultBranchRef.Target.Commit.History.Nodes {
 			u := commit.Author.User
+
 			_, viewed := seen[u.Login]
 			if viewed {
 				continue
 			}
+
 			seen[u.Login] = struct{}{}
+
 			keys := []string{}
 			for _, key := range u.PublicKeys.Nodes {
 				keys = append(keys, key.Key)
 			}
+
 			if len(keys) > 0 {
 				users = append(users, User{Login: u.Login, Keys: keys})
 			}
@@ -188,6 +200,7 @@ func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string
 		if !query.Repository.DefaultBranchRef.Target.Commit.History.PageInfo.HasNextPage {
 			break
 		}
+
 		variables["prCursor"] = githubv4.String(query.Repository.DefaultBranchRef.Target.Commit.History.PageInfo.EndCursor)
 	}
 
@@ -196,6 +209,7 @@ func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string
 
 func (l *localClient) GetCollaboratorKeys(ctx context.Context, owner, name string) ([]User, error) {
 	users := []User{}
+
 	var query struct {
 		Repository struct {
 			Collaborators struct {
@@ -217,6 +231,7 @@ func (l *localClient) GetCollaboratorKeys(ctx context.Context, owner, name strin
 		"owner":    githubv4.String(owner),
 		"name":     githubv4.String(name),
 	}
+
 	for {
 		if err := l.ghClient.Query(ctx, &query, variables); err != nil {
 			return users, err
@@ -232,6 +247,7 @@ func (l *localClient) GetCollaboratorKeys(ctx context.Context, owner, name strin
 				users = append(users, User{Login: collaborator.Login, Keys: keys})
 			}
 		}
+
 		if !query.Repository.Collaborators.PageInfo.HasNextPage {
 			break
 		}

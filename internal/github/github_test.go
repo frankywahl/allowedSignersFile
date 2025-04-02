@@ -1,7 +1,6 @@
 package github_test
 
 import (
-	"context"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -13,7 +12,8 @@ import (
 
 func TestGithub(t *testing.T) {
 	_, _ = github.NewEnterpriseClient("foo", "bar", github.SetLogger(&LoggerMock{}), github.SetVerbose())
-	ctx := context.Background()
+	ctx := t.Context()
+
 	t.Run("GetCollaboratorKeys", func(t *testing.T) {
 		s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			expect := "Bearer anything"
@@ -25,11 +25,14 @@ func TestGithub(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+
 			defer f.Close()
+
 			if _, err := io.Copy(w, f); err != nil {
 				t.Fatal(err)
 			}
 		}))
+
 		client, err := github.NewEnterpriseClient(s.URL, "anything")
 		if err != nil {
 			t.Fatal(err)
@@ -60,11 +63,14 @@ func TestGithub(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+
 			defer f.Close()
+
 			if _, err := io.Copy(w, f); err != nil {
 				t.Fatal(err)
 			}
 		}))
+
 		client, err := github.NewEnterpriseClient(s.URL, "anything")
 		if err != nil {
 			t.Fatal(err)

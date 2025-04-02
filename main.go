@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -12,11 +13,13 @@ import (
 	"github.com/frankywahl/allowedSignatures/internal/ssh"
 )
 
-var ghToken string
-var githubEnteprise = "http://api.github.com/graphql"
-var verbose bool
-var owner, repo string
-var useContributors bool
+var (
+	ghToken         string
+	githubEnteprise = "http://api.github.com/graphql"
+	verbose         bool
+	owner, repo     string
+	useContributors bool
+)
 
 func main() {
 	ctx := context.Background()
@@ -29,13 +32,14 @@ func run(ctx context.Context) error {
 	if err := parseFlags(ctx); err != nil {
 		return err
 	}
+
 	opts := []github.Option{}
 
 	if verbose {
 		opts = append(opts, github.SetVerbose())
 	}
-	ghClient, err := github.NewEnterpriseClient(githubEnteprise, ghToken, opts...)
 
+	ghClient, err := github.NewEnterpriseClient(githubEnteprise, ghToken, opts...)
 	if err != nil {
 		return err
 	}
@@ -46,6 +50,7 @@ func run(ctx context.Context) error {
 	} else {
 		users, err = ghClient.GetCollaboratorKeys(ctx, owner, repo)
 	}
+
 	if err != nil {
 		return err
 	}
@@ -63,6 +68,7 @@ func printOutput(w io.Writer, users []github.User) error {
 			fmt.Fprintf(os.Stdout, "%s %s %s\n", user.Login, key, user.Login)
 		}
 	}
+
 	return nil
 }
 
@@ -76,10 +82,12 @@ func parseFlags(ctx context.Context) error {
 	flag.Parse()
 
 	if owner == "" {
-		return fmt.Errorf("owner cannot be blank")
+		return errors.New("owner cannot be blank")
 	}
+
 	if repo == "" {
-		return fmt.Errorf("repository cannot be blank")
+		return errors.New("repository cannot be blank")
 	}
+
 	return nil
 }

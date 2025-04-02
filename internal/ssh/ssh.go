@@ -12,6 +12,7 @@ func FilterSigningKeys(keys []string) []string {
 			valid = append(valid, key)
 		}
 	}
+
 	return valid
 }
 
@@ -31,5 +32,6 @@ func validKey(key string) bool {
 			return true
 		}
 	}
+
 	return false
 }
