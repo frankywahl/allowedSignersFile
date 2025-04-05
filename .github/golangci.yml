@@ -1,6 +1,26 @@
-run:
-  skip-files:
+version: 2
 
-linters-settings:
-  errcheck:
-    exclude: .github/errcheck.txt
+output:
+  formats:
+    text:
+      path: stdout
+      color: true
+
+linters:
+  exclusions:
+    rules:
+      linters: errcheck
+      source: "^\\s*defer\\s+"
+
+  settings:
+    errcheck:
+      check-type-assertions: true
+      exclude-functions:
+        - fmt.Fprintf
+
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - goimports
+    - gofumpt
