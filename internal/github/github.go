@@ -10,6 +10,8 @@ import (
 	"net/http"
 
 	"github.com/shurcooL/githubv4"
+
+	githubREST "github.com/google/go-github/v71/github"
 	"golang.org/x/oauth2"
 )
 
@@ -28,10 +30,11 @@ func (l *defaultLogger) Infof(s string, args ...interface{}) {
 }
 
 type localClient struct {
-	url      string
-	ghClient *githubv4.Client
-	token    string
-	logger   Logger
+	url        string
+	ghClient   *githubv4.Client
+	token      string
+	logger     Logger
+	restClient *githubREST.Client
 }
 
 // Option can be passed when instantiating a client.
@@ -256,4 +259,16 @@ func (l *localClient) GetCollaboratorKeys(ctx context.Context, owner, name strin
 	}
 
 	return users, nil
+}
+
+func (l *localClient) getUserKeys(ctx context.Context, author string) ([]string, error) {
+	keys, _, err := l.restClient.Users.ListSSHSigningKeys(ctx, author, nil)
+	if err != nil {
+		return []string{}, err
+	}
+	k := []string{}
+	for _, keys := range keys {
+		k = append(k, *keys.Key)
+	}
+	return k, nil
 }
