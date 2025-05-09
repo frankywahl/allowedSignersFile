@@ -47,10 +47,11 @@ func NewEnterpriseClient(url string, token string, opts ...Option) (*localClient
 	)
 	oauthClient := oauth2.NewClient(context.Background(), src)
 	lc := &localClient{
-		url:      url,
-		ghClient: githubv4.NewEnterpriseClient(url, oauthClient),
-		token:    token,
-		logger:   &defaultLogger{},
+		url:        url,
+		ghClient:   githubv4.NewEnterpriseClient(url, oauthClient),
+		token:      token,
+		logger:     &defaultLogger{},
+		restClient: githubREST.NewClient(oauthClient),
 	}
 
 	for _, opt := range opts {
@@ -78,7 +79,6 @@ func SetVerbose() Option {
 			original: oauthClient.Transport,
 			logger:   c.logger,
 		}
-		c.ghClient = githubv4.NewEnterpriseClient(c.url, oauthClient)
 
 		return nil
 	}
