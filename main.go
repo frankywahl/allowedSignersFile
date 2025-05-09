@@ -73,7 +73,7 @@ func printOutput(w io.Writer, users []github.User) error {
 }
 
 func parseFlags(ctx context.Context) error {
-	flag.StringVar(&ghToken, "github-token", os.Getenv("GITHUB_API_TOKEN"), "the github token to use to make requests\ndefaults to environment variable GITHUB_API_TOKEN")
+	flag.StringVar(&ghToken, "github-token", os.Getenv("GITHUB_TOKEN"), "the github token to use to make requests\ndefaults to environment variable GITHUB_TOKEN")
 	flag.BoolVar(&verbose, "verbose", false, "print debugging information")
 	flag.BoolVar(&useContributors, "use-contributors", false, "use contributors to generate list. This is more complete, but will make many more requests to GitHub")
 	flag.StringVar(&repo, "repository", "", "the repository to get the information for")
