@@ -1,37 +1,33 @@
 package ssh
 
-import "strings"
+import "golang.org/x/crypto/ssh"
 
-// FilterSigingKeys will let us know if the ssh key
-// used can be used to sign a git commit.
+// signingKeyTypes is the set of SSH public key algorithms that can be
+// used to sign a git commit.
+var signingKeyTypes = map[string]struct{}{
+	ssh.KeyAlgoRSA:        {},
+	ssh.KeyAlgoECDSA256:   {},
+	ssh.KeyAlgoECDSA384:   {},
+	ssh.KeyAlgoECDSA521:   {},
+	ssh.KeyAlgoED25519:    {},
+	ssh.KeyAlgoSKECDSA256: {},
+	ssh.KeyAlgoSKED25519:  {},
+}
+
+// FilterSigningKeys returns the subset of keys that can be used to
+// sign a git commit. Keys that fail to parse are discarded.
 func FilterSigningKeys(keys []string) []string {
 	valid := []string{}
 
 	for _, key := range keys {
-		if validKey(key) {
+		pk, _, _, _, err := ssh.ParseAuthorizedKey([]byte(key))
+		if err != nil {
+			continue
+		}
+		if _, ok := signingKeyTypes[pk.Type()]; ok {
 			valid = append(valid, key)
 		}
 	}
 
 	return valid
-}
-
-var validPrefixes = [...]string{
-	"ssh-rsa",
-	"ecdsa-sha2-nistp256",
-	"ecdsa-sha2-nistp384",
-	"ecdsa-sha2-nistp521",
-	"ssh-ed25519",
-	"sk-ecdsa-sha2-nistp256@openssh.com",
-	"sk-ssh-ed25519@openssh.com",
-}
-
-func validKey(key string) bool {
-	for _, prefix := range validPrefixes {
-		if strings.HasPrefix(key, prefix) {
-			return true
-		}
-	}
-
-	return false
 }
