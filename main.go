@@ -8,6 +8,8 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/frankywahl/allowedSignatures/internal/github"
 	"github.com/frankywahl/allowedSignatures/internal/ssh"
@@ -22,7 +24,8 @@ var (
 )
 
 func main() {
-	ctx := context.Background()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 	if err := run(ctx); err != nil {
 		log.Fatal(err)
 	}
