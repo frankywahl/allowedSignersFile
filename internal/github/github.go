@@ -15,12 +15,12 @@ import (
 
 // Logger formater.
 type Logger interface {
-	Infof(format string, opts ...interface{})
+	Infof(format string, opts ...any)
 }
 
 type defaultLogger struct{}
 
-func (l *defaultLogger) Infof(s string, args ...interface{}) {
+func (l *defaultLogger) Infof(s string, args ...any) {
 	fmt.Printf(
 		fmt.Sprintf("[INFO] %s\n", s),
 		args...,
@@ -98,7 +98,7 @@ type loggingClient struct {
 func (c *loggingClient) RoundTrip(r *http.Request) (*http.Response, error) {
 	var query struct {
 		Query     string
-		Variables map[string]interface{}
+		Variables map[string]any
 	}
 
 	defer r.Body.Close()
@@ -166,7 +166,7 @@ func (l *localClient) GetContributorKeys(ctx context.Context, owner, name string
 
 	seen := map[string]struct{}{}
 
-	variables := map[string]interface{}{
+	variables := map[string]any{
 		"prCursor": (*githubv4.String)(nil),
 		"owner":    githubv4.String(owner),
 		"name":     githubv4.String(name),
@@ -226,7 +226,7 @@ func (l *localClient) GetCollaboratorKeys(ctx context.Context, owner, name strin
 		} `graphql:"repository(owner: $owner, name: $name)"`
 	}
 
-	variables := map[string]interface{}{
+	variables := map[string]any{
 		"prCursor": (*githubv4.String)(nil),
 		"owner":    githubv4.String(owner),
 		"name":     githubv4.String(name),
