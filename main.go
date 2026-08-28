@@ -14,11 +14,11 @@ import (
 )
 
 var (
-	ghToken         string
-	githubEnteprise = "https://api.github.com/graphql"
-	verbose         bool
-	owner, repo     string
-	useContributors bool
+	ghToken          string
+	githubEnterprise = "https://api.github.com/graphql"
+	verbose          bool
+	owner, repo      string
+	useContributors  bool
 )
 
 func main() {
@@ -39,7 +39,7 @@ func run(ctx context.Context) error {
 		opts = append(opts, github.SetVerbose())
 	}
 
-	ghClient, err := github.NewEnterpriseClient(githubEnteprise, ghToken, opts...)
+	ghClient, err := github.NewEnterpriseClient(githubEnterprise, ghToken, opts...)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func parseFlags(ctx context.Context) error {
 	flag.BoolVar(&verbose, "verbose", false, "print debugging information")
 	flag.BoolVar(&useContributors, "use-contributors", false, "use contributors to generate list. This is more complete, but will make many more requests to GitHub")
 	flag.StringVar(&repo, "repository", "", "the repository to get the information for")
-	flag.StringVar(&githubEnteprise, "github-enterprise", "https://api.github.com/graphql", "use github enterprise URL as the endpoint instead of standard GitHub")
+	flag.StringVar(&githubEnterprise, "github-enterprise", "https://api.github.com/graphql", "use github enterprise URL as the endpoint instead of standard GitHub")
 	flag.StringVar(&owner, "owner", "", "the organisation or owner of the repository")
 	flag.Parse()
 
