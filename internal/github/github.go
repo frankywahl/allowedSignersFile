@@ -32,6 +32,7 @@ type localClient struct {
 	ghClient *githubv4.Client
 	token    string
 	logger   Logger
+	verbose  bool
 }
 
 // Option can be passed when instantiating a client.
@@ -56,6 +57,19 @@ func NewEnterpriseClient(ctx context.Context, url string, token string, opts ...
 		}
 	}
 
+	// Apply verbose transport after all options, so logger/token/url are final.
+	if lc.verbose {
+		src := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: lc.token},
+		)
+		oauthClient := oauth2.NewClient(ctx, src)
+		oauthClient.Transport = &loggingClient{
+			original: oauthClient.Transport,
+			logger:   lc.logger,
+		}
+		lc.ghClient = githubv4.NewEnterpriseClient(lc.url, oauthClient)
+	}
+
 	return lc, nil
 }
 
@@ -67,16 +81,7 @@ func NewClient(ctx context.Context, token string, opts ...Option) (*localClient,
 // SetVerbose will log the requests that are being made.
 func SetVerbose() Option {
 	return func(c *localClient) error {
-		src := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: c.token},
-		)
-		oauthClient := oauth2.NewClient(context.Background(), src)
-		oauthClient.Transport = &loggingClient{
-			original: oauthClient.Transport,
-			logger:   c.logger,
-		}
-		c.ghClient = githubv4.NewEnterpriseClient(c.url, oauthClient)
-
+		c.verbose = true
 		return nil
 	}
 }
