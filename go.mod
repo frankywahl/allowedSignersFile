@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/matryer/moq v0.7.1 // indirect
 	github.com/shurcooL/graphql v0.0.0-20220606043923-3cf50f8a0a29 // indirect
 	golang.org/x/mod v0.39.0 // indirect
 	golang.org/x/net v0.58.0 // indirect
@@ -19,4 +20,7 @@ require (
 	golang.org/x/vuln v1.7.0 // indirect
 )
 
-tool golang.org/x/vuln/cmd/govulncheck
+tool (
+	github.com/matryer/moq
+	golang.org/x/vuln/cmd/govulncheck
+)

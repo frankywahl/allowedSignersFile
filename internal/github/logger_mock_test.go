@@ -18,7 +18,7 @@ var _ github.Logger = &LoggerMock{}
 //
 //		// make and configure a mocked github.Logger
 //		mockedLogger := &LoggerMock{
-//			InfofFunc: func(format string, opts ...interface{})  {
+//			InfofFunc: func(format string, opts ...any)  {
 //				panic("mock out the Infof method")
 //			},
 //		}
@@ -29,7 +29,7 @@ var _ github.Logger = &LoggerMock{}
 //	}
 type LoggerMock struct {
 	// InfofFunc mocks the Infof method.
-	InfofFunc func(format string, opts ...interface{})
+	InfofFunc func(format string, opts ...any)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -38,20 +38,20 @@ type LoggerMock struct {
 			// Format is the format argument value.
 			Format string
 			// Opts is the opts argument value.
-			Opts []interface{}
+			Opts []any
 		}
 	}
 	lockInfof sync.RWMutex
 }
 
 // Infof calls InfofFunc.
-func (mock *LoggerMock) Infof(format string, opts ...interface{}) {
+func (mock *LoggerMock) Infof(format string, opts ...any) {
 	if mock.InfofFunc == nil {
 		panic("LoggerMock.InfofFunc: method is nil but Logger.Infof was just called")
 	}
 	callInfo := struct {
 		Format string
-		Opts   []interface{}
+		Opts   []any
 	}{
 		Format: format,
 		Opts:   opts,
@@ -68,11 +68,11 @@ func (mock *LoggerMock) Infof(format string, opts ...interface{}) {
 //	len(mockedLogger.InfofCalls())
 func (mock *LoggerMock) InfofCalls() []struct {
 	Format string
-	Opts   []interface{}
+	Opts   []any
 } {
 	var calls []struct {
 		Format string
-		Opts   []interface{}
+		Opts   []any
 	}
 	mock.lockInfof.RLock()
 	calls = mock.calls.Infof

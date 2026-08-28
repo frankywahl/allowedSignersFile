@@ -1,4 +1,4 @@
-//go:generate go run github.com/matryer/moq@latest --pkg github_test -out logger_mock_test.go . Logger
+//go:generate go tool moq --pkg github_test -out logger_mock_test.go . Logger
 package github
 
 import (
