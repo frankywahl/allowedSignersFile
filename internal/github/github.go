@@ -38,11 +38,11 @@ type localClient struct {
 type Option func(s *localClient) error
 
 // NewEnterpriseClient give a github client for use with Enterprise.
-func NewEnterpriseClient(url string, token string, opts ...Option) (*localClient, error) {
+func NewEnterpriseClient(ctx context.Context, url string, token string, opts ...Option) (*localClient, error) {
 	src := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
 	)
-	oauthClient := oauth2.NewClient(context.Background(), src)
+	oauthClient := oauth2.NewClient(ctx, src)
 	lc := &localClient{
 		url:      url,
 		ghClient: githubv4.NewEnterpriseClient(url, oauthClient),
@@ -60,8 +60,8 @@ func NewEnterpriseClient(url string, token string, opts ...Option) (*localClient
 }
 
 // NewClient will create a new Github Client with Github's URL.
-func NewClient(token string, opts ...Option) (*localClient, error) {
-	return NewEnterpriseClient("https://api.github.com/graphql", token, opts...)
+func NewClient(ctx context.Context, token string, opts ...Option) (*localClient, error) {
+	return NewEnterpriseClient(ctx, "https://api.github.com/graphql", token, opts...)
 }
 
 // SetVerbose will log the requests that are being made.

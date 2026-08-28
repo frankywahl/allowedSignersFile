@@ -11,7 +11,7 @@ import (
 )
 
 func TestGithub(t *testing.T) {
-	_, _ = github.NewEnterpriseClient("foo", "bar", github.SetLogger(&LoggerMock{}), github.SetVerbose())
+	_, _ = github.NewEnterpriseClient(t.Context(), "foo", "bar", github.SetLogger(&LoggerMock{}), github.SetVerbose())
 	ctx := t.Context()
 
 	t.Run("GetCollaboratorKeys", func(t *testing.T) {
@@ -33,7 +33,7 @@ func TestGithub(t *testing.T) {
 			}
 		}))
 
-		client, err := github.NewEnterpriseClient(s.URL, "anything")
+		client, err := github.NewEnterpriseClient(ctx, s.URL, "anything")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -71,7 +71,7 @@ func TestGithub(t *testing.T) {
 			}
 		}))
 
-		client, err := github.NewEnterpriseClient(s.URL, "anything")
+		client, err := github.NewEnterpriseClient(ctx, s.URL, "anything")
 		if err != nil {
 			t.Fatal(err)
 		}

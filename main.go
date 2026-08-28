@@ -42,7 +42,7 @@ func run(ctx context.Context) error {
 		opts = append(opts, github.SetVerbose())
 	}
 
-	ghClient, err := github.NewEnterpriseClient(githubEnterprise, ghToken, opts...)
+	ghClient, err := github.NewEnterpriseClient(ctx, githubEnterprise, ghToken, opts...)
 	if err != nil {
 		return err
 	}
