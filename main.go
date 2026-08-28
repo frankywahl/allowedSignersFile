@@ -15,7 +15,7 @@ import (
 
 var (
 	ghToken         string
-	githubEnteprise = "http://api.github.com/graphql"
+	githubEnteprise = "https://api.github.com/graphql"
 	verbose         bool
 	owner, repo     string
 	useContributors bool
