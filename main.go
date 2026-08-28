@@ -65,7 +65,7 @@ func run(ctx context.Context) error {
 func printOutput(w io.Writer, users []github.User) error {
 	for _, user := range users {
 		for _, key := range ssh.FilterSigningKeys(user.Keys) {
-			fmt.Fprintf(os.Stdout, "%s %s %s\n", user.Login, key, user.Login)
+			fmt.Fprintf(w, "%s %s %s\n", user.Login, key, user.Login)
 		}
 	}
 
