@@ -22,7 +22,7 @@ Note: we can use the `--use-contributors` as a means to get all the contributors
 
 ## Limitations
 
-There is an assumption that users do not have more that 100 SSH keys attached to their profile.
+There is an assumption that users do not have more than 100 SSH keys attached to their profile. Users with more than 100 keys will have the remainder omitted.
 
 ## SSH Signing
 
